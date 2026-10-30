@@ -1,0 +1,514 @@
+<UserControl x:Class="CS2Launcher.Views.GrenadesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CS2Launcher.ViewModels"
+             xmlns:m="clr-namespace:CS2Launcher.Models"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance Type=vm:GrenadesViewModel}">
+
+    <UserControl.Background>
+        <SolidColorBrush Color="#0E0E10" />
+    </UserControl.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header + фильтры -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Гранаты по картам"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="{StaticResource TextPrimaryBrush}"
+                       Margin="32,32,32,16" />
+
+            <TextBlock Text="Smoke, Flash, HE, Molotov с точками становления, ориентирами и пошаговой инструкцией"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="13"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       Margin="32,0,32,16" />
+
+            <!-- Список карт (горизонтальные кнопки) -->
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled"
+                          Margin="32,0,32,16">
+                <ItemsControl ItemsSource="{Binding Maps}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type m:CS2MapInfo}">
+                            <Border Margin="0,0,8,0"
+                                    Background="{StaticResource BgLightBrush}"
+                                    BorderBrush="{Binding Name,
+                                                          Converter={x:Static vm:MapSelectedConverter.Instance},
+                                                          ConverterParameter={Binding SelectedMap.Name,
+                                                                                          RelativeSource={RelativeSource AncestorType=UserControl}},
+                                                          FallbackValue=#26262A}"
+                                    BorderThickness="2,0,0,0"
+                                    CornerRadius="4"
+                                    Padding="12,8"
+                                    Cursor="Hand"
+                                    Tag="{Binding Name}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                    Path=DataContext.SelectMapCommand}"
+                                                  CommandParameter="{Binding}" />
+                                </Border.InputBindings>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Emoji}"
+                                               FontSize="20"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,8,0" />
+                                    <TextBlock Text="{Binding DisplayName}"
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Фильтры -->
+            <Border Background="{StaticResource BgMidBrush}"
+                    BorderBrush="{StaticResource BorderDarkBrush}"
+                    BorderThickness="0,1,0,0"
+                    Padding="32,12,32,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Поиск -->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="🔍"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0" />
+                        <TextBox Style="{StaticResource FaceitTextBox}"
+                                 Width="280"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Поиск по имени, тегу, точке становления" />
+                    </StackPanel>
+
+                    <!-- Фильтр типа -->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Margin="16,0,0,0">
+                        <TextBlock Text="Тип:"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0" />
+                        <ComboBox Style="{StaticResource FaceitComboBox}"
+                                   Width="120"
+                                   SelectedValuePath="Tag"
+                                   SelectedValue="{Binding TypeFilter}">
+                            <ComboBoxItem Content="Все" Tag="{x:Null}" />
+                            <ComboBoxItem Content="💨 Smoke" Tag="{x:Static m:GrenadeType.Smoke}" />
+                            <ComboBoxItem Content="⚡ Flash" Tag="{x:Static m:GrenadeType.Flash}" />
+                            <ComboBoxItem Content="💥 HE" Tag="{x:Static m:GrenadeType.HE}" />
+                            <ComboBoxItem Content="🔥 Molotov" Tag="{x:Static m:GrenadeType.Molotov}" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Фильтр стороны -->
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                Margin="16,0,0,0">
+                        <TextBlock Text="Сторона:"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0" />
+                        <ComboBox Style="{StaticResource FaceitComboBox}"
+                                   Width="100"
+                                   SelectedValuePath="Tag"
+                                   SelectedValue="{Binding SideFilter}">
+                            <ComboBoxItem Content="T (Attack)" Tag="{x:Static m:LineupSide.Attack}" />
+                            <ComboBoxItem Content="CT (Defense)" Tag="{x:Static m:LineupSide.Defense}" />
+                            <ComboBoxItem Content="Обе" Tag="{x:Static m:LineupSide.Both}" />
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <!-- Список + детальный просмотр -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="280" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="1.5*" MinWidth="400" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Список гранат -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource BgDarkBrush}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              Padding="20,16">
+                    <ItemsControl ItemsSource="{Binding FilteredLineups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type m:GrenadeLineup}">
+                                <Border Margin="0,0,0,8"
+                                        Background="{StaticResource BgLightBrush}"
+                                        BorderBrush="{StaticResource BorderDarkBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Padding="12,10"
+                                        Cursor="Hand">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftClick"
+                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                        Path=DataContext.SelectLineupCommand}"
+                                                      CommandParameter="{Binding}" />
+                                    </Border.InputBindings>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Эмодзи типа -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding GrenadeEmoji}"
+                                                   FontSize="22"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,12,0" />
+
+                                        <!-- Инфо -->
+                                        <StackPanel Grid.Column="1"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,2,0,0">
+                                                <Border Background="{Binding SideColor, Converter={x:Static vm:StringToBrushConverter.Instance}}"
+                                                        CornerRadius="2"
+                                                        Padding="5,1"
+                                                        Margin="0,0,6,0">
+                                                    <TextBlock Text="{Binding SideDisplay}"
+                                                               FontFamily="{StaticResource MonoFont}"
+                                                               FontSize="9"
+                                                               FontWeight="Bold"
+                                                               Foreground="White" />
+                                                </Border>
+                                                <TextBlock Text="{Binding DifficultyDisplay, StringFormat=' • {0}'}"
+                                                           FontFamily="{StaticResource MonoFont}"
+                                                           FontSize="10"
+                                                           Foreground="{Binding DifficultyColor, Converter={x:Static vm:StringToBrushConverter.Instance}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Jumpthrow / Favorite -->
+                                        <StackPanel Grid.Column="2"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding JumpThrowDisplay}"
+                                                       FontFamily="{StaticResource MonoFont}"
+                                                       FontSize="9"
+                                                       Foreground="{StaticResource WarningBrush}"
+                                                       HorizontalAlignment="Right" />
+                                            <TextBlock Text="⭐"
+                                                       FontSize="14"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,4,0,0"
+                                                       Visibility="{Binding IsFavorite,
+                                                                            Converter={x:Static vm:BoolToVisConverter.Instance}}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                        <!-- Empty state -->
+                        <ItemsControl.Style>
+                            <Style TargetType="ItemsControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FilteredLineups.Count}"
+                                                 Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ItemsControl">
+                                                    <StackPanel VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center"
+                                                                Margin="0,40">
+                                                        <TextBlock Text="💣"
+                                                                   FontSize="48"
+                                                                   HorizontalAlignment="Center"
+                                                                   Margin="0,0,0,12" />
+                                                        <TextBlock Text="Нет раскидок для выбранной карты"
+                                                                   FontFamily="{StaticResource PrimaryFont}"
+                                                                   FontSize="13"
+                                                                   Foreground="{StaticResource TextDimBrush}"
+                                                                   HorizontalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Style>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Разделитель -->
+            <Border Grid.Column="1"
+                    Background="{StaticResource BorderDarkBrush}"
+                    Width="1" />
+
+            <!-- Детальный просмотр -->
+            <Border Grid.Column="2"
+                    Background="{StaticResource BgDarkBrush}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          Padding="32,24,32,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Контент -->
+                    <StackPanel Grid.Row="0"
+                                Visibility="{Binding SelectedLineup,
+                                                      Converter={x:Static vm:NullToVisConverter.Instance}}">
+                        <!-- Заголовок -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,8">
+                            <TextBlock Text="{Binding SelectedLineup.GrenadeEmoji}"
+                                       FontSize="28"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0" />
+                            <TextBlock Text="{Binding SelectedLineup.Name}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <!-- Бейджи -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,20">
+                            <Border Background="{Binding SelectedLineup.SideColor, Converter={x:Static vm:StringToBrushConverter.Instance}}"
+                                    CornerRadius="3"
+                                    Padding="8,3"
+                                    Margin="0,0,8,0">
+                                <TextBlock Text="{Binding SelectedLineup.SideDisplay}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="11"
+                                           FontWeight="Bold"
+                                           Foreground="White" />
+                            </Border>
+
+                            <Border Background="{Binding SelectedLineup.DifficultyColor, Converter={x:Static vm:StringToBrushConverter.Instance}}"
+                                    CornerRadius="3"
+                                    Padding="8,3"
+                                    Margin="0,0,8,0">
+                                <TextBlock Text="{Binding SelectedLineup.DifficultyDisplay}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="11"
+                                           FontWeight="Bold"
+                                           Foreground="White" />
+                            </Border>
+
+                            <Border Background="#2A2A2E"
+                                    CornerRadius="3"
+                                    Padding="8,3"
+                                    Margin="0,0,8,0">
+                                <TextBlock Text="{Binding SelectedLineup.JumpThrowDisplay}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="11"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource WarningBrush}" />
+                            </Border>
+
+                            <Border Background="#2A2A2E"
+                                    CornerRadius="3"
+                                    Padding="8,3">
+                                <TextBlock Text="{Binding SelectedLineup.ClickInstruction, StringFormat='Клик: {0}'}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}" />
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Описание -->
+                        <Border Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource BorderDarkBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12,10"
+                                Margin="0,0,0,16">
+                            <TextBlock Text="{Binding SelectedLineup.Description}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+
+                        <!-- Точка становления -->
+                        <TextBlock Text="📍 Точка становления"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,0,6" />
+                        <Border Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource BorderDarkBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12,10"
+                                Margin="0,0,0,16">
+                            <TextBlock Text="{Binding SelectedLineup.StandPosition}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+
+                        <!-- Ориентир прицела -->
+                        <TextBlock Text="🎯 Ориентир прицела"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,0,6" />
+                        <Border Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource BorderDarkBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12,10"
+                                Margin="0,0,0,16">
+                            <TextBlock Text="{Binding SelectedLineup.AimLandmark}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+
+                        <!-- Пошаговая инструкция -->
+                        <TextBlock Text="📋 Пошаговая инструкция"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,0,0,6" />
+                        <Border Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource BorderDarkBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12,12"
+                                Margin="0,0,0,16">
+                            <ItemsControl ItemsSource="{Binding SelectedLineup.Steps}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Margin="0,3">
+                                            <Border Background="{StaticResource AccentBrush}"
+                                                    Width="20" Height="20"
+                                                    CornerRadius="10"
+                                                    VerticalAlignment="Top"
+                                                    Margin="0,0,10,0">
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
+                                                                          Path=(ItemsControl.AlternationIndex),
+                                                                          Converter={x:Static vm:IndexPlusOneConverter.Instance}}"
+                                                           FontFamily="{StaticResource MonoFont}"
+                                                           FontSize="10"
+                                                           FontWeight="Bold"
+                                                           Foreground="White"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center" />
+                                            </Border>
+                                            <TextBlock Text="{Binding}"
+                                                       FontFamily="{StaticResource PrimaryFont}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       TextWrapping="Wrap"
+                                                       VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.AlternationCount>999</ItemsControl.AlternationCount>
+                            </ItemsControl>
+                        </Border>
+
+                        <!-- Кнопки -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,8,0,0">
+                            <Button Style="{StaticResource PrimaryButton}"
+                                    Command="{Binding OpenVideoCommand}"
+                                    CommandParameter="{Binding SelectedLineup}"
+                                    Visibility="{Binding SelectedLineup.VideoUrl,
+                                                         Converter={x:Static vm:StringToVisConverter.Instance}}"
+                                    Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="▶" Margin="0,0,8,0" />
+                                    <TextBlock Text="Смотреть видео" />
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource SecondaryButton}"
+                                    Command="{Binding ToggleFavoriteCommand}"
+                                    CommandParameter="{Binding SelectedLineup}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="⭐" Margin="0,0,8,0" />
+                                    <TextBlock Text="В избранное" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Пустое состояние -->
+                    <StackPanel Grid.Row="0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Visibility="{Binding SelectedLineup,
+                                                      Converter={x:Static vm:NullToInverseVisConverter.Instance}}">
+                        <TextBlock Text="🎯"
+                                   FontSize="64"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,16" />
+                        <TextBlock Text="Выберите гранату"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="Кликните по раскидке слева, чтобы увидеть детали"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0" />
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

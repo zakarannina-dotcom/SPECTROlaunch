@@ -1,0 +1,130 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Application -->
+    <sys:String x:Key="AppTitle">CS2 Launcher</sys:String>
+    <sys:String x:Key="AppSubtitle">Custom Counter-Strike 2 launcher</sys:String>
+
+    <!-- Navigation -->
+    <sys:String x:Key="NavLaunch">Launch</sys:String>
+    <sys:String x:Key="NavConfig">Config</sys:String>
+    <sys:String x:Key="NavStats">Stats</sys:String>
+
+    <!-- Profile / auth -->
+    <sys:String x:Key="LoginSteam">Sign in with Steam</sys:String>
+    <sys:String x:Key="LoginInProgress">Authenticating...</sys:String>
+    <sys:String x:Key="Logout">Sign out</sys:String>
+    <sys:String x:Key="NotLoggedIn">Guest</sys:String>
+    <sys:String x:Key="SteamIdLabel">SteamID:</sys:String>
+
+    <!-- Launch tab -->
+    <sys:String x:Key="LaunchTitle">Launch Counter-Strike 2</sys:String>
+    <sys:String x:Key="LaunchSubtitle">Configure launch options and click play</sys:String>
+    <sys:String x:Key="PlayButton">PLAY</sys:String>
+    <sys:String x:Key="CloseGameButton">Close game</sys:String>
+    <sys:String x:Key="LaunchArgsTitle">Launch options</sys:String>
+    <sys:String x:Key="OptionNoVid">Disable intro video (-novid)</sys:String>
+    <sys:String x:Key="OptionNoJoy">Disable joystick (-nojoy)</sys:String>
+    <sys:String x:Key="OptionHigh">High priority (-high)</sys:String>
+    <sys:String x:Key="OptionFullscreen">Fullscreen mode (-fullscreen)</sys:String>
+    <sys:String x:Key="OptionConsole">Enable console (-console)</sys:String>
+    <sys:String x:Key="OptionNoBrowser">Disable MOTD (-disablehtmlmotd)</sys:String>
+    <sys:String x:Key="OptionThreads">Specify threads (-threads)</sys:String>
+    <sys:String x:Key="OptionTickrate">Specify tickrate (-tickrate)</sys:String>
+    <sys:String x:Key="CustomArgs">Custom arguments</sys:String>
+    <sys:String x:Key="CustomArgsPlaceholder">-console +map de_dust2</sys:String>
+    <sys:String x:Key="UseSteamProtocol">Launch via Steam (steam://run/730)</sys:String>
+    <sys:String x:Key="ExecutablePath">cs2.exe path</sys:String>
+    <sys:String x:Key="BrowseButton">Browse...</sys:String>
+    <sys:String x:Key="StatusRunning">CS2 is running</sys:String>
+    <sys:String x:Key="StatusNotRunning">CS2 is not running</sys:String>
+
+    <!-- Config tab -->
+    <sys:String x:Key="ConfigTitle">CS2 Settings</sys:String>
+    <sys:String x:Key="ConfigSubtitle">Crosshair, mouse and graphics configuration</sys:String>
+    <sys:String x:Key="MouseSettings">Mouse settings</sys:String>
+    <sys:String x:Key="Sensitivity">Sensitivity</sys:String>
+    <sys:String x:Key="RawInput">Raw input</sys:String>
+    <sys:String x:Key="CrosshairSettings">Crosshair settings</sys:String>
+    <sys:String x:Key="CrosshairSize">Size</sys:String>
+    <sys:String x:Key="CrosshairThickness">Thickness</sys:String>
+    <sys:String x:Key="CrosshairGap">Gap</sys:String>
+    <sys:String x:Key="CrosshairColor">Color</sys:String>
+    <sys:String x:Key="CrosshairOutline">Outline</sys:String>
+    <sys:String x:Key="CrosshairDot">Center dot</sys:String>
+    <sys:String x:Key="ViewmodelSettings">Viewmodel</sys:String>
+    <sys:String x:Key="Fov">FOV</sys:String>
+    <sys:String x:Key="ViewmodelFov">Viewmodel FOV</sys:String>
+    <sys:String x:Key="MiscSettings">Misc</sys:String>
+    <sys:String x:Key="NoTutorial">Hide tutorials</sys:String>
+    <sys:String x:Key="SaveSettingsButton">Save settings</sys:String>
+    <sys:String x:Key="SaveAutoexecButton">Write autoexec.cfg</sys:String>
+    <sys:String x:Key="ResetButton">Reset</sys:String>
+    <sys:String x:Key="AutoexecPreviewTitle">autoexec.cfg preview</sys:String>
+
+    <!-- Import / export -->
+    <sys:String x:Key="ImportExportTitle">Import / Export configuration</sys:String>
+    <sys:String x:Key="ImportExportSubtitle">Load from .cfg file or via crosshair share code</sys:String>
+    <sys:String x:Key="ConfigFileSection">Config file (.cfg)</sys:String>
+    <sys:String x:Key="ImportCfgButton">Import .cfg</sys:String>
+    <sys:String x:Key="ExportCfgButton">Export .cfg</sys:String>
+    <sys:String x:Key="ShareCodeSection">Crosshair share code (CSGO-xxxxx-xxxxx-xxxxx)</sys:String>
+    <sys:String x:Key="ImportShareCodeButton">Import code</sys:String>
+    <sys:String x:Key="GenerateShareCodeButton">Generate code</sys:String>
+    <sys:String x:Key="ShareCodeHint">💡 Code generation copies it to clipboard</sys:String>
+
+    <!-- Steam sync info -->
+    <sys:String x:Key="SyncInfoTitle">Steam synchronization</sys:String>
+    <sys:String x:Key="SyncInfoIntro">What transfers into the game and across computers:</sys:String>
+    <sys:String x:Key="SyncYesTitle">✓ Synced:</sys:String>
+    <sys:String x:Key="SyncNoTitle">✗ Local only:</sys:String>
+    <sys:String x:Key="SyncInfoHint">💡 Tip: on another PC just open the launcher, sign in to Steam and click "Write autoexec.cfg" — settings will be loaded from settings.json.</sys:String>
+
+    <!-- Games -->
+    <sys:String x:Key="GamesSection">Games</sys:String>
+    <sys:String x:Key="GameCS2">Counter-Strike 2</sys:String>
+    <sys:String x:Key="GameARCRaiders">ARC Raiders</sys:String>
+    <sys:String x:Key="GameARCRaidersNote">Coming soon</sys:String>
+
+    <!-- Stats tab -->
+    <sys:String x:Key="StatsTitle">Player statistics</sys:String>
+    <sys:String x:Key="StatsSubtitle">Overview and recent matches</sys:String>
+    <sys:String x:Key="RefreshButton">Refresh</sys:String>
+    <sys:String x:Key="StatTotalMatches">Total matches</sys:String>
+    <sys:String x:Key="StatWins">Wins</sys:String>
+    <sys:String x:Key="StatLosses">Losses</sys:String>
+    <sys:String x:Key="StatWinRate">Win rate</sys:String>
+    <sys:String x:Key="StatTotalKills">Total kills</sys:String>
+    <sys:String x:Key="StatTotalDeaths">Total deaths</sys:String>
+    <sys:String x:Key="StatKDR">K/D</sys:String>
+    <sys:String x:Key="StatHeadshots">Headshots</sys:String>
+    <sys:String x:Key="StatHours">Hours played</sys:String>
+    <sys:String x:Key="StatRank">Rank</sys:String>
+    <sys:String x:Key="RecentMatches">Recent matches</sys:String>
+    <sys:String x:Key="MatchMap">Map</sys:String>
+    <sys:String x:Key="MatchMode">Mode</sys:String>
+    <sys:String x:Key="MatchDate">Date</sys:String>
+    <sys:String x:Key="MatchKills">K</sys:String>
+    <sys:String x:Key="MatchDeaths">D</sys:String>
+    <sys:String x:Key="MatchAssists">A</sys:String>
+    <sys:String x:Key="MatchMVPs">MVP</sys:String>
+    <sys:String x:Key="MatchResult">Result</sys:String>
+    <sys:String x:Key="ResultWin">Win</sys:String>
+    <sys:String x:Key="ResultLoss">Loss</sys:String>
+    <sys:String x:Key="ResultDraw">Draw</sys:String>
+
+    <!-- Statuses -->
+    <sys:String x:Key="StatusAuthenticating">Browser opened for Steam authentication...</sys:String>
+    <sys:String x:Key="StatusWelcome">Welcome, SteamID:</sys:String>
+    <sys:String x:Key="StatusError">Error</sys:String>
+    <sys:String x:Key="StatusCancelled">Authentication cancelled</sys:String>
+    <sys:String x:Key="StatusLoggedOut">You have been logged out</sys:String>
+    <sys:String x:Key="StatusLanguageChanged">Language changed</sys:String>
+    <sys:String x:Key="StatusLoading">Loading...</sys:String>
+
+    <!-- Footer -->
+    <sys:String x:Key="FooterVersion">Version</sys:String>
+    <sys:String x:Key="FooterNote">Not affiliated with Valve Corporation</sys:String>
+
+</ResourceDictionary>

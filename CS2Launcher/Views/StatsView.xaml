@@ -1,0 +1,257 @@
+<UserControl x:Class="CS2Launcher.Views.StatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CS2Launcher.ViewModels"
+             xmlns:m="clr-namespace:CS2Launcher.Models"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="640" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance Type=vm:StatsViewModel}">
+
+    <UserControl.Background>
+        <SolidColorBrush Color="#0E0E10" />
+    </UserControl.Background>
+
+    <UserControl.Resources>
+        <!-- Шаблон ячейки статистики — применяется автоматически к StatCard -->
+        <DataTemplate DataType="{x:Type vm:StatCard}">
+            <Border Background="{StaticResource PanelBrush}"
+                    BorderBrush="{StaticResource BorderDarkBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="16,18">
+                <StackPanel>
+                    <TextBlock Text="{Binding Label}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="11"
+                               FontWeight="Medium"
+                               Foreground="{StaticResource TextDimBrush}"
+                               Margin="0,0,0,8"
+                               TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{Binding Value}"
+                               FontFamily="{StaticResource MonoFont}"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="{Binding Color, Converter={x:Static vm:StringToBrushConverter.Instance}}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="32,32,32,16">
+
+        <StackPanel>
+            <!-- Header -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="{DynamicResource StatsTitle}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="32"
+                               FontWeight="Black"
+                               Foreground="{StaticResource TextPrimaryBrush}" />
+                    <TextBlock Text="{DynamicResource StatsSubtitle}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="14"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,4,0,0" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Style="{StaticResource SecondaryButton}"
+                        Command="{Binding RefreshCommand}"
+                        VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="↻" Margin="0,0,8,0" />
+                        <TextBlock Text="{DynamicResource RefreshButton}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- Loading indicator -->
+            <ProgressBar IsIndeterminate="True"
+                         Height="2"
+                         Margin="0,0,0,16"
+                         Visibility="{Binding IsLoading,
+                                              Converter={x:Static vm:BoolToVisConverter.Instance}}" />
+
+            <!-- Stats grid -->
+            <ItemsControl ItemsSource="{Binding Overall, Converter={x:Static vm:OverallToStatCardsConverter.Instance}}"
+                          Margin="0,0,0,24">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" Rows="3" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- Recent matches table -->
+            <Border Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource RecentMatches}"
+                                   Style="{StaticResource SubHeaderText}" />
+                    </Grid>
+
+                    <!-- Headers row -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="{DynamicResource MatchMap}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="1" Text="{DynamicResource MatchMode}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="2" Text="{DynamicResource MatchDate}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="3" Text="{DynamicResource MatchKills}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="4" Text="{DynamicResource MatchDeaths}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="5" Text="{DynamicResource MatchAssists}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="6" Text="{DynamicResource MatchMVPs}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <TextBlock Grid.Column="7" Text="{DynamicResource MatchResult}"
+                                   Style="{StaticResource LabelStyle}" />
+                    </Grid>
+
+                    <Border BorderBrush="{StaticResource BorderDarkBrush}"
+                            BorderThickness="0,1,0,0"
+                            Margin="0,0,0,4" />
+
+                    <!-- Match rows -->
+                    <ItemsControl ItemsSource="{Binding RecentMatches}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type m:GameStats}">
+                                <Grid Height="44">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="120" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Map -->
+                                    <StackPanel Grid.Column="0"
+                                                Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+                                        <Border Width="3" Height="20"
+                                                Background="{Binding Result,
+                                                                     Converter={x:Static vm:ResultToColorConverter.Instance}}"
+                                                Margin="0,0,12,0" />
+                                        <TextBlock Text="{Binding MapName}"
+                                                   FontFamily="{StaticResource PrimaryFont}"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+
+                                    <!-- Mode -->
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding GameMode}"
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="12"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               VerticalAlignment="Center" />
+
+                                    <!-- Date -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="{Binding MatchDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                               FontFamily="{StaticResource MonoFont}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource TextDimBrush}"
+                                               VerticalAlignment="Center" />
+
+                                    <!-- K / D / A / MVP -->
+                                    <TextBlock Grid.Column="3"
+                                               Text="{Binding Kills}"
+                                               FontFamily="{StaticResource MonoFont}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource SuccessBrush}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="4"
+                                               Text="{Binding Deaths}"
+                                               FontFamily="{StaticResource MonoFont}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource DangerBrush}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="5"
+                                               Text="{Binding Assists}"
+                                               FontFamily="{StaticResource MonoFont}"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="6"
+                                               Text="{Binding MVPs}"
+                                               FontFamily="{StaticResource MonoFont}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource AccentBrush}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+
+                                    <!-- Result -->
+                                    <Border Grid.Column="7"
+                                            Background="{Binding Result,
+                                                                Converter={x:Static vm:ResultToColorConverter.Instance}}"
+                                            CornerRadius="3"
+                                            Padding="8,2"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Result,
+                                                                  Converter={x:Static vm:MatchResultToTextConverter.Instance}}"
+                                                   FontFamily="{StaticResource PrimaryFont}"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="White" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Error message -->
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="{StaticResource DangerBrush}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="13"
+                       Margin="0,16,0,0"
+                       TextWrapping="Wrap" />
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

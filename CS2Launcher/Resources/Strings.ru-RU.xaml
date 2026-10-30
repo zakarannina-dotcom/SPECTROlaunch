@@ -1,0 +1,130 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Приложение -->
+    <sys:String x:Key="AppTitle">CS2 Launcher</sys:String>
+    <sys:String x:Key="AppSubtitle">Кастомный лаунчер Counter-Strike 2</sys:String>
+
+    <!-- Навигация -->
+    <sys:String x:Key="NavLaunch">Запуск</sys:String>
+    <sys:String x:Key="NavConfig">Конфиг</sys:String>
+    <sys:String x:Key="NavStats">Статистика</sys:String>
+
+    <!-- Профиль / авторизация -->
+    <sys:String x:Key="LoginSteam">Войти через Steam</sys:String>
+    <sys:String x:Key="LoginInProgress">Авторизация...</sys:String>
+    <sys:String x:Key="Logout">Выйти</sys:String>
+    <sys:String x:Key="NotLoggedIn">Гость</sys:String>
+    <sys:String x:Key="SteamIdLabel">SteamID:</sys:String>
+
+    <!-- Вкладка запуска -->
+    <sys:String x:Key="LaunchTitle">Запуск Counter-Strike 2</sys:String>
+    <sys:String x:Key="LaunchSubtitle">Настройте параметры запуска и нажмите кнопку</sys:String>
+    <sys:String x:Key="PlayButton">ИГРАТЬ</sys:String>
+    <sys:String x:Key="CloseGameButton">Закрыть игру</sys:String>
+    <sys:String x:Key="LaunchArgsTitle">Параметры запуска</sys:String>
+    <sys:String x:Key="OptionNoVid">Отключить интро-видео (-novid)</sys:String>
+    <sys:String x:Key="OptionNoJoy">Отключить геймпад (-nojoy)</sys:String>
+    <sys:String x:Key="OptionHigh">Высокий приоритет (-high)</sys:String>
+    <sys:String x:Key="OptionFullscreen">Полноэкранный режим (-fullscreen)</sys:String>
+    <sys:String x:Key="OptionConsole">Включить консоль (-console)</sys:String>
+    <sys:String x:Key="OptionNoBrowser">Отключить MOTD (-disablehtmlmotd)</sys:String>
+    <sys:String x:Key="OptionThreads">Указать потоки (-threads)</sys:String>
+    <sys:String x:Key="OptionTickrate">Указать tickrate (-tickrate)</sys:String>
+    <sys:String x:Key="CustomArgs">Свои аргументы</sys:String>
+    <sys:String x:Key="CustomArgsPlaceholder">-console +map de_dust2</sys:String>
+    <sys:String x:Key="UseSteamProtocol">Запускать через Steam (steam://run/730)</sys:String>
+    <sys:String x:Key="ExecutablePath">Путь к cs2.exe</sys:String>
+    <sys:String x:Key="BrowseButton">Обзор...</sys:String>
+    <sys:String x:Key="StatusRunning">CS2 запущен</sys:String>
+    <sys:String x:Key="StatusNotRunning">CS2 не запущен</sys:String>
+
+    <!-- Вкладка конфига -->
+    <sys:String x:Key="ConfigTitle">Настройки CS2</sys:String>
+    <sys:String x:Key="ConfigSubtitle">Конфигурация прицела, мыши и графики</sys:String>
+    <sys:String x:Key="MouseSettings">Настройки мыши</sys:String>
+    <sys:String x:Key="Sensitivity">Чувствительность</sys:String>
+    <sys:String x:Key="RawInput">Raw Input</sys:String>
+    <sys:String x:Key="CrosshairSettings">Настройки прицела</sys:String>
+    <sys:String x:Key="CrosshairSize">Размер</sys:String>
+    <sys:String x:Key="CrosshairThickness">Толщина</sys:String>
+    <sys:String x:Key="CrosshairGap">Зазор</sys:String>
+    <sys:String x:Key="CrosshairColor">Цвет</sys:String>
+    <sys:String x:Key="CrosshairOutline">Контур</sys:String>
+    <sys:String x:Key="CrosshairDot">Точка в центре</sys:String>
+    <sys:String x:Key="ViewmodelSettings">Viewmodel</sys:String>
+    <sys:String x:Key="Fov">FOV</sys:String>
+    <sys:String x:Key="ViewmodelFov">Viewmodel FOV</sys:String>
+    <sys:String x:Key="MiscSettings">Прочее</sys:String>
+    <sys:String x:Key="NoTutorial">Скрыть туториалы</sys:String>
+    <sys:String x:Key="SaveSettingsButton">Сохранить настройки</sys:String>
+    <sys:String x:Key="SaveAutoexecButton">Записать autoexec.cfg</sys:String>
+    <sys:String x:Key="ResetButton">Сброс</sys:String>
+    <sys:String x:Key="AutoexecPreviewTitle">Предпросмотр autoexec.cfg</sys:String>
+
+    <!-- Импорт / экспорт -->
+    <sys:String x:Key="ImportExportTitle">Импорт / Экспорт конфигурации</sys:String>
+    <sys:String x:Key="ImportExportSubtitle">Загрузка из .cfg файла или по share-коду прицела</sys:String>
+    <sys:String x:Key="ConfigFileSection">Конфигурационный файл (.cfg)</sys:String>
+    <sys:String x:Key="ImportCfgButton">Импорт .cfg</sys:String>
+    <sys:String x:Key="ExportCfgButton">Экспорт .cfg</sys:String>
+    <sys:String x:Key="ShareCodeSection">Share-код прицела (CSGO-xxxxx-xxxxx-xxxxx)</sys:String>
+    <sys:String x:Key="ImportShareCodeButton">Импорт кода</sys:String>
+    <sys:String x:Key="GenerateShareCodeButton">Генерировать код</sys:String>
+    <sys:String x:Key="ShareCodeHint">💡 Генерация кода копирует его в буфер обмена</sys:String>
+
+    <!-- Инфо о синхронизации Steam -->
+    <sys:String x:Key="SyncInfoTitle">Синхронизация со Steam</sys:String>
+    <sys:String x:Key="SyncInfoIntro">Что переносится в игру и между компьютерами:</sys:String>
+    <sys:String x:Key="SyncYesTitle">✓ Синхронизируется:</sys:String>
+    <sys:String x:Key="SyncNoTitle">✗ Только локально:</sys:String>
+    <sys:String x:Key="SyncInfoHint">💡 Совет: на другом компьютере просто открой лаунчер, войди в Steam и нажми «Записать autoexec.cfg» — настройки подтянутся из settings.json.</sys:String>
+
+    <!-- Игры -->
+    <sys:String x:Key="GamesSection">Игры</sys:String>
+    <sys:String x:Key="GameCS2">Counter-Strike 2</sys:String>
+    <sys:String x:Key="GameARCRaiders">ARC Raiders</sys:String>
+    <sys:String x:Key="GameARCRaidersNote">Скоро будет добавлена</sys:String>
+
+    <!-- Вкладка статистики -->
+    <sys:String x:Key="StatsTitle">Статистика игрока</sys:String>
+    <sys:String x:Key="StatsSubtitle">Сводная информация и недавние матчи</sys:String>
+    <sys:String x:Key="RefreshButton">Обновить</sys:String>
+    <sys:String x:Key="StatTotalMatches">Всего матчей</sys:String>
+    <sys:String x:Key="StatWins">Побед</sys:String>
+    <sys:String x:Key="StatLosses">Поражений</sys:String>
+    <sys:String x:Key="StatWinRate">Винрейт</sys:String>
+    <sys:String x:Key="StatTotalKills">Всего убийств</sys:String>
+    <sys:String x:Key="StatTotalDeaths">Всего смертей</sys:String>
+    <sys:String x:Key="StatKDR">K/D</sys:String>
+    <sys:String x:Key="StatHeadshots">Хедшоты</sys:String>
+    <sys:String x:Key="StatHours">Часов сыграно</sys:String>
+    <sys:String x:Key="StatRank">Ранг</sys:String>
+    <sys:String x:Key="RecentMatches">Недавние матчи</sys:String>
+    <sys:String x:Key="MatchMap">Карта</sys:String>
+    <sys:String x:Key="MatchMode">Режим</sys:String>
+    <sys:String x:Key="MatchDate">Дата</sys:String>
+    <sys:String x:Key="MatchKills">K</sys:String>
+    <sys:String x:Key="MatchDeaths">D</sys:String>
+    <sys:String x:Key="MatchAssists">A</sys:String>
+    <sys:String x:Key="MatchMVPs">MVP</sys:String>
+    <sys:String x:Key="MatchResult">Итог</sys:String>
+    <sys:String x:Key="ResultWin">Победа</sys:String>
+    <sys:String x:Key="ResultLoss">Поражение</sys:String>
+    <sys:String x:Key="ResultDraw">Ничья</sys:String>
+
+    <!-- Статусы -->
+    <sys:String x:Key="StatusAuthenticating">Открыт браузер для авторизации Steam...</sys:String>
+    <sys:String x:Key="StatusWelcome">Добро пожаловать, SteamID:</sys:String>
+    <sys:String x:Key="StatusError">Ошибка</sys:String>
+    <sys:String x:Key="StatusCancelled">Авторизация отменена</sys:String>
+    <sys:String x:Key="StatusLoggedOut">Вы вышли из аккаунта</sys:String>
+    <sys:String x:Key="StatusLanguageChanged">Язык изменён</sys:String>
+    <sys:String x:Key="StatusLoading">Загрузка...</sys:String>
+
+    <!-- Footer -->
+    <sys:String x:Key="FooterVersion">Версия</sys:String>
+    <sys:String x:Key="FooterNote">Не аффилировано с Valve Corporation</sys:String>
+
+</ResourceDictionary>

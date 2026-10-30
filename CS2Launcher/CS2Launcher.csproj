@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>CS2Launcher</AssemblyName>
+    <RootNamespace>CS2Launcher</RootNamespace>
+    <Version>1.0.0.0</Version>
+    <Company>CS2Launcher Team</Company>
+    <Product>CS2 Launcher</Product>
+    <Description>Custom Counter-Strike 2 Launcher with Steam integration</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+  </ItemGroup>
+
+  <!--
+    В .NET 8 Windows Desktop SDK (UseWPF=true) .xaml файлы включаются автоматически:
+      - App.xaml → ApplicationDefinition (один на проект)
+      - *.xaml в проекте → Page
+      - *.xaml.cs → Compile (DependentUpon=File.xaml)
+    Поэтому НЕ добавляем их вручную — иначе будет ошибка NETSDK1022 о дублировании.
+    Файлы .xaml в папке Resources/ тоже автоматически подхватятся как Page,
+    что нормально для ResourceDictionary.
+  -->
+
+</Project>

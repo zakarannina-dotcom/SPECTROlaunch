@@ -1,0 +1,754 @@
+<UserControl x:Class="CS2Launcher.Views.ConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CS2Launcher.ViewModels"
+             xmlns:m="clr-namespace:CS2Launcher.Models"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance Type=vm:ConfigViewModel}">
+
+    <UserControl.Background>
+        <SolidColorBrush Color="#0E0E10" />
+    </UserControl.Background>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="32,32,32,16">
+
+        <StackPanel>
+
+            <!-- Header -->
+            <TextBlock Text="{DynamicResource ConfigTitle}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+            <TextBlock Text="{DynamicResource ConfigSubtitle}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="14"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       Margin="0,4,0,32" />
+
+            <!-- Crosshair preview + Mouse settings row -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Crosshair preview with REAL crosshair -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardPanel}"
+                        Height="220">
+                    <Grid>
+                        <Border CornerRadius="6">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#2A2A2E" Offset="0" />
+                                    <GradientStop Color="#1A1A1D" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <!-- Реальный прицел: 4 линии + точка -->
+                        <Canvas HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Width="200" Height="200"
+                                ClipToBounds="False">
+
+                            <!-- Outline (чёрная обводка, рисуется под цветными линиями) -->
+                            <Canvas x:Name="CrosshairCanvas"
+                                    Width="200" Height="200">
+
+                                <!-- ТОЧКА В ЦЕНТРЕ -->
+                                <Rectangle x:Name="Dot"
+                                           Canvas.Left="99" Canvas.Top="99"
+                                           Width="{Binding Config.CrosshairThickness}"
+                                           Height="{Binding Config.CrosshairThickness}"
+                                           Fill="{Binding Config.CrosshairColor}"
+                                           Visibility="{Binding Config.CrosshairDot,
+                                                                Converter={x:Static vm:BoolToVisConverter.Instance}}" />
+
+                                <!-- ВЕРХНЯЯ ЛИНИЯ -->
+                                <Rectangle x:Name="LineTop"
+                                           Width="{Binding Config.CrosshairThickness}"
+                                           Height="{Binding Config.CrosshairSize}"
+                                           Fill="{Binding Config.CrosshairColor}"
+                                           Canvas.Left="99" Canvas.Top="0" />
+
+                                <!-- НИЖНЯЯ ЛИНИЯ -->
+                                <Rectangle x:Name="LineBottom"
+                                           Width="{Binding Config.CrosshairThickness}"
+                                           Height="{Binding Config.CrosshairSize}"
+                                           Fill="{Binding Config.CrosshairColor}"
+                                           Canvas.Left="99" Canvas.Top="0" />
+
+                                <!-- ЛЕВАЯ ЛИНИЯ -->
+                                <Rectangle x:Name="LineLeft"
+                                           Width="{Binding Config.CrosshairSize}"
+                                           Height="{Binding Config.CrosshairThickness}"
+                                           Fill="{Binding Config.CrosshairColor}"
+                                           Canvas.Left="0" Canvas.Top="99" />
+
+                                <!-- ПРАВАЯ ЛИНИЯ -->
+                                <Rectangle x:Name="LineRight"
+                                           Width="{Binding Config.CrosshairSize}"
+                                           Height="{Binding Config.CrosshairThickness}"
+                                           Fill="{Binding Config.CrosshairColor}"
+                                           Canvas.Left="0" Canvas.Top="99" />
+                            </Canvas>
+                        </Canvas>
+
+                        <TextBlock Text="PREVIEW"
+                                   FontFamily="{StaticResource MonoFont}"
+                                   FontSize="10"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom"
+                                   Margin="0,0,12,12" />
+                    </Grid>
+                </Border>
+
+                <!-- Mouse settings -->
+                <Border Grid.Column="2"
+                        Style="{StaticResource CardPanel}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource MouseSettings}"
+                                   Style="{StaticResource SubHeaderText}"
+                                   Margin="0,0,0,16" />
+
+                        <!-- Sensitivity slider (с десятыми) -->
+                        <TextBlock Text="{DynamicResource Sensitivity}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Slider Style="{StaticResource FaceitSlider}"
+                                    Minimum="0.1" Maximum="10"
+                                    Value="{Binding Config.Sensitivity}"
+                                    Width="180"
+                                    TickFrequency="0.1"
+                                    IsSnapToTickEnabled="False" />
+                            <TextBox Style="{StaticResource FaceitTextBox}"
+                                     Text="{Binding Config.Sensitivity,
+                                                    StringFormat={}{0:F2},
+                                                    UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60"
+                                     Margin="12,0,0,0"
+                                     FontFamily="{StaticResource MonoFont}"
+                                     Foreground="{StaticResource AccentBrush}"
+                                     FontWeight="SemiBold" />
+                        </StackPanel>
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource RawInput}"
+                                  IsChecked="{Binding Config.RawInput}"
+                                  Margin="0,16,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Crosshair settings -->
+            <Border Style="{StaticResource CardPanel}"
+                    Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource CrosshairSettings}"
+                               Style="{StaticResource SubHeaderText}"
+                               Margin="0,0,0,16" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Size -->
+                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                            <TextBlock Text="{DynamicResource CrosshairSize}"
+                                       Style="{StaticResource LabelStyle}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Slider Style="{StaticResource FaceitSlider}"
+                                        Minimum="0" Maximum="10"
+                                        Value="{Binding Config.CrosshairSize}"
+                                        Width="120" />
+                                <TextBlock Text="{Binding Config.CrosshairSize}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource AccentBrush}"
+                                           VerticalAlignment="Center"
+                                           Margin="12,0,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Thickness -->
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0">
+                            <TextBlock Text="{DynamicResource CrosshairThickness}"
+                                       Style="{StaticResource LabelStyle}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Slider Style="{StaticResource FaceitSlider}"
+                                        Minimum="0" Maximum="5"
+                                        Value="{Binding Config.CrosshairThickness}"
+                                        Width="120" />
+                                <TextBlock Text="{Binding Config.CrosshairThickness}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource AccentBrush}"
+                                           VerticalAlignment="Center"
+                                           Margin="12,0,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Gap -->
+                        <StackPanel Grid.Column="2" Margin="16,0,0,0">
+                            <TextBlock Text="{DynamicResource CrosshairGap}"
+                                       Style="{StaticResource LabelStyle}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Slider Style="{StaticResource FaceitSlider}"
+                                        Minimum="-10" Maximum="10"
+                                        Value="{Binding Config.CrosshairGap}"
+                                        Width="120" />
+                                <TextBlock Text="{Binding Config.CrosshairGap}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="14"
+                                           Foreground="{StaticResource AccentBrush}"
+                                           VerticalAlignment="Center"
+                                           Margin="12,0,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Color + checkboxes -->
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{DynamicResource CrosshairColor}"
+                                   Style="{StaticResource LabelStyle}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,12,0" />
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#00FF00"
+                                       Stroke="White"
+                                       StrokeThickness="2"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#00FF00"
+                                       Cursor="Hand" />
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#FFFF00"
+                                       Stroke="{StaticResource BorderLightBrush}"
+                                       StrokeThickness="1"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#FFFF00"
+                                       Cursor="Hand" />
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#FF00AA"
+                                       Stroke="{StaticResource BorderLightBrush}"
+                                       StrokeThickness="1"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#FF00AA"
+                                       Cursor="Hand" />
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#00AAFF"
+                                       Stroke="{StaticResource BorderLightBrush}"
+                                       StrokeThickness="1"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#00AAFF"
+                                       Cursor="Hand" />
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#FFFFFF"
+                                       Stroke="{StaticResource BorderLightBrush}"
+                                       StrokeThickness="1"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#FFFFFF"
+                                       Cursor="Hand" />
+                            <Rectangle Width="28" Height="28"
+                                       Margin="0,0,6,0"
+                                       Fill="#FF3B3B"
+                                       Stroke="{StaticResource BorderLightBrush}"
+                                       StrokeThickness="1"
+                                       MouseLeftButtonDown="ColorSwatch_Click"
+                                       Tag="#FF3B3B"
+                                       Cursor="Hand" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal">
+                            <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                      Content="{DynamicResource CrosshairOutline}"
+                                      IsChecked="{Binding Config.CrosshairOutline}"
+                                      Margin="0,0,16,0" />
+                            <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                      Content="{DynamicResource CrosshairDot}"
+                                      IsChecked="{Binding Config.CrosshairDot}" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Viewmodel + Misc -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Viewmodel -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardPanel}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource ViewmodelSettings}"
+                                   Style="{StaticResource SubHeaderText}"
+                                   Margin="0,0,0,16" />
+
+                        <TextBlock Text="{DynamicResource Fov}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <Slider Style="{StaticResource FaceitSlider}"
+                                    Minimum="60" Maximum="120"
+                                    Value="{Binding Config.Fov}"
+                                    Width="180" />
+                            <TextBlock Text="{Binding Config.Fov}"
+                                       FontFamily="{StaticResource MonoFont}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource AccentBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0,0,0" />
+                        </StackPanel>
+
+                        <TextBlock Text="{DynamicResource ViewmodelFov}"
+                                   Style="{StaticResource LabelStyle}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Slider Style="{StaticResource FaceitSlider}"
+                                    Minimum="54" Maximum="68"
+                                    Value="{Binding Config.ViewmodelFov}"
+                                    Width="180" />
+                            <TextBlock Text="{Binding Config.ViewmodelFov}"
+                                       FontFamily="{StaticResource MonoFont}"
+                                       FontSize="14"
+                                       Foreground="{StaticResource AccentBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Misc -->
+                <Border Grid.Column="2"
+                        Style="{StaticResource CardPanel}">
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource MiscSettings}"
+                                   Style="{StaticResource SubHeaderText}"
+                                   Margin="0,0,0,16" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource NoTutorial}"
+                                  IsChecked="{Binding Config.NoTutorial}"
+                                  Margin="0,0,0,16" />
+
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Command="{Binding ResetCommand}"
+                                HorizontalAlignment="Left">
+                            <TextBlock Text="{DynamicResource ResetButton}" />
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ============================================================ -->
+            <!-- ИМПОРТ / ЭКСПОРТ КОНФИГОВ                                    -->
+            <!-- ============================================================ -->
+            <Border Style="{StaticResource CardPanel}"
+                    Margin="0,0,0,24">
+                <StackPanel>
+                    <TextBlock Text="Импорт / Экспорт конфигурации"
+                               Style="{StaticResource SubHeaderText}"
+                               Margin="0,0,0,4" />
+                    <TextBlock Text="Загрузка из .cfg файла или по share-коду прицела"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="11"
+                               Foreground="{StaticResource TextDimBrush}"
+                               Margin="0,0,0,16" />
+
+                    <!-- Кнопки импорта/экспорта .cfg -->
+                    <TextBlock Text="Конфигурационный файл (.cfg)"
+                               Style="{StaticResource LabelStyle}"
+                               Margin="0,0,0,4" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,16">
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Command="{Binding ImportCfgCommand}"
+                                Margin="0,0,8,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📂" Margin="0,0,8,0" />
+                                <TextBlock Text="Импорт .cfg" />
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Command="{Binding ExportCfgCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💾" Margin="0,0,8,0" />
+                                <TextBlock Text="Экспорт .cfg" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Share-код прицела -->
+                    <TextBlock Text="Share-код прицела (CSGO-xxxxx-xxxxx-xxxxx)"
+                               Style="{StaticResource LabelStyle}"
+                               Margin="0,0,0,4" />
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0"
+                                 Style="{StaticResource FaceitTextBox}"
+                                 Text="{Binding ShareCodeInput, UpdateSourceTrigger=PropertyChanged}"
+                                 FontFamily="{StaticResource MonoFont}"
+                                 FontSize="12"
+                                 ToolTip="Вставьте код в формате CSGO-xxxxx-xxxxx-xxxxx" />
+
+                        <Button Grid.Column="1"
+                                Style="{StaticResource PrimaryButton}"
+                                Command="{Binding ImportShareCodeCommand}"
+                                Margin="8,0,0,0">
+                            <TextBlock Text="Импорт кода" />
+                        </Button>
+
+                        <Button Grid.Column="2"
+                                Style="{StaticResource SecondaryButton}"
+                                Command="{Binding ExportShareCodeCommand}"
+                                Margin="8,0,0,0">
+                            <TextBlock Text="Генерировать код" />
+                        </Button>
+                    </Grid>
+
+                    <TextBlock Text="💡 Генерация кода копирует его в буфер обмена"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="11"
+                               Foreground="{StaticResource TextDimBrush}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <!-- Action buttons -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,24">
+                <Button Style="{StaticResource PrimaryButton}"
+                        Command="{Binding SaveSettingsCommand}"
+                        Margin="0,0,12,0">
+                    <TextBlock Text="{DynamicResource SaveSettingsButton}" />
+                </Button>
+                <Button Style="{StaticResource SecondaryButton}"
+                        Command="{Binding SaveAutoexecCommand}"
+                        Margin="0,0,12,0">
+                    <TextBlock Text="{DynamicResource SaveAutoexecButton}" />
+                </Button>
+                <TextBlock Text="{Binding SaveResult}"
+                           FontFamily="{StaticResource PrimaryFont}"
+                           FontSize="13"
+                           Foreground="{StaticResource SuccessBrush}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+
+            <!-- ============================================================ -->
+            <!-- ПРЕСЕТЫ ПРО-ИГРОКОВ                                          -->
+            <!-- ============================================================ -->
+            <Border Style="{StaticResource CardPanel}"
+                    Margin="0,0,0,24">
+                <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Пресеты про-игроков"
+                                       Style="{StaticResource SubHeaderText}" />
+                            <TextBlock Text="Примените прицел профессионального игрока в один клик"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="11"
+                                       Foreground="{StaticResource TextDimBrush}"
+                                       Margin="0,2,0,0" />
+                        </StackPanel>
+
+                        <!-- Поиск -->
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="🔍"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBox Style="{StaticResource FaceitTextBox}"
+                                     Width="200"
+                                     Text="{Binding PlayerFilter, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="Имя игрока, команда или страна" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Список игроков -->
+                    <Border Background="#0A0A0C"
+                            BorderBrush="{StaticResource BorderDarkBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            MaxHeight="380">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding FilteredPlayers}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type m:ProPlayerPreset}">
+                                        <Border Margin="8,4"
+                                                Background="{StaticResource BgLightBrush}"
+                                                BorderBrush="{StaticResource BorderDarkBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="4"
+                                                Padding="12,10"
+                                                Cursor="Hand">
+                                            <Border.InputBindings>
+                                                <MouseBinding MouseAction="LeftClick"
+                                                              Command="{Binding DataContext.ApplyProPlayerCommand,
+                                                                                RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                              CommandParameter="{Binding}" />
+                                            </Border.InputBindings>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Флаг -->
+                                                <TextBlock Grid.Column="0"
+                                                           Text="{Binding CountryFlag}"
+                                                           FontSize="22"
+                                                           VerticalAlignment="Center"
+                                                           Margin="0,0,12,0" />
+
+                                                <!-- Имя + команда -->
+                                                <StackPanel Grid.Column="1"
+                                                            VerticalAlignment="Center">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding PlayerName}"
+                                                                   FontFamily="{StaticResource PrimaryFont}"
+                                                                   FontSize="14"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                                   VerticalAlignment="Center" />
+                                                        <TextBlock Text=" • "
+                                                                   FontFamily="{StaticResource PrimaryFont}"
+                                                                   FontSize="12"
+                                                                   Foreground="{StaticResource TextDimBrush}"
+                                                                   VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Team}"
+                                                                   FontFamily="{StaticResource MonoFont}"
+                                                                   FontSize="12"
+                                                                   Foreground="{StaticResource AccentBrush}"
+                                                                   VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,2,0,0">
+                                                        <Border Background="{StaticResource BgDarkBrush}"
+                                                                CornerRadius="2"
+                                                                Padding="6,1"
+                                                                Margin="0,0,6,0">
+                                                            <TextBlock Text="{Binding Role}"
+                                                                       FontFamily="{StaticResource MonoFont}"
+                                                                       FontSize="9"
+                                                                       Foreground="{StaticResource TextSecondaryBrush}" />
+                                                        </Border>
+                                                        <TextBlock Text="{Binding Description, StringFormat='Sens: {0:F2}'}"
+                                                                   FontFamily="{StaticResource MonoFont}"
+                                                                   FontSize="10"
+                                                                   Foreground="{StaticResource TextDimBrush}"
+                                                                   VerticalAlignment="Center" />
+                                                        <Border Background="#2A2A2E"
+                                                                CornerRadius="2"
+                                                                Padding="4,1"
+                                                                Margin="6,0,0,0">
+                                                            <TextBlock Text="{Binding Year}"
+                                                                       FontFamily="{StaticResource MonoFont}"
+                                                                       FontSize="8"
+                                                                       FontWeight="Bold"
+                                                                       Foreground="{StaticResource TextDimBrush}" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <!-- Кнопка "Применить" -->
+                                                <Border Grid.Column="2"
+                                                        Background="{StaticResource AccentBrush}"
+                                                        CornerRadius="3"
+                                                        Padding="12,6"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="ПРИМЕНИТЬ"
+                                                               FontFamily="{StaticResource PrimaryFont}"
+                                                               FontSize="10"
+                                                               FontWeight="Bold"
+                                                               Foreground="White" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <TextBlock Text="💡 Кликните по карточке — настройки прицела и чувствительность применятся автоматически"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="11"
+                               FontStyle="Italic"
+                               Foreground="{StaticResource TextDimBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================================ -->
+            <!-- ИНФО-БЛОК: ЧТО СИНХРОНИЗИРУЕТСЯ СО STEAM                     -->
+            <!-- ============================================================ -->
+            <Border Background="#161620"
+                    BorderBrush="{StaticResource BorderLightBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="20,16"
+                    Margin="0,0,0,24">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,12">
+                        <TextBlock Text="☁"
+                                   FontSize="18"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0" />
+                        <TextBlock Text="{DynamicResource SyncInfoTitle}"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <TextBlock Text="{DynamicResource SyncInfoIntro}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="12"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,12" />
+
+                    <!-- Список: что синхронизируется -->
+                    <TextBlock Text="{DynamicResource SyncYesTitle}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource SuccessBrush}"
+                               Margin="0,0,0,6" />
+                    <ItemsControl Margin="20,0,0,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock Text="✓ "
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SuccessBrush}" />
+                                    <TextBlock Text="{Binding}"
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки прицела (через autoexec.cfg)</sys:String>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Чувствительность мыши</sys:String>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">FOV и Viewmodel</sys:String>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Скины и инвентарь (через Steam Cloud)</sys:String>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Профиль и статистика (на серверах Valve)</sys:String>
+                    </ItemsControl>
+
+                    <!-- Список: что НЕ синхронизируется -->
+                    <TextBlock Text="{DynamicResource SyncNoTitle}"
+                               FontFamily="{StaticResource PrimaryFont}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DangerBrush}"
+                               Margin="0,8,0,6" />
+                    <ItemsControl Margin="20,0,0,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock Text="✗ "
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource DangerBrush}" />
+                                    <TextBlock Text="{Binding}"
+                                               FontFamily="{StaticResource PrimaryFont}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Параметры запуска (-novid, -tickrate, и т.д.) — только на этом компе</sys:String>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Сам файл autoexec.cfg (но лаунчер может его пересоздать)</sys:String>
+                    </ItemsControl>
+
+                    <Border Background="#0E0E10"
+                            BorderBrush="{StaticResource BorderDarkBrush}"
+                            BorderThickness="0,1,0,0"
+                            Margin="0,8,0,0"
+                            Padding="0,8,0,0">
+                        <TextBlock Text="{DynamicResource SyncInfoHint}"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="11"
+                                   FontStyle="Italic"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Autoexec preview -->
+            <Border Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource AutoexecPreviewTitle}"
+                               Style="{StaticResource SubHeaderText}"
+                               Margin="0,0,0,12" />
+
+                    <Border Background="#0A0A0C"
+                            BorderBrush="{StaticResource BorderDarkBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Padding="12">
+                        <TextBox Text="{Binding AutoexecPreview}"
+                                 IsReadOnly="True"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="{StaticResource TextSecondaryBrush}"
+                                 FontFamily="{StaticResource MonoFont}"
+                                 FontSize="12"
+                                 VerticalScrollBarVisibility="Auto"
+                                 AcceptsReturn="True"
+                                 TextWrapping="NoWrap" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

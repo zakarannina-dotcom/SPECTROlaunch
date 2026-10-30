@@ -1,0 +1,260 @@
+<UserControl x:Class="CS2Launcher.Views.LaunchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:CS2Launcher.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="640" d:DesignWidth="900"
+             d:DataContext="{d:DesignInstance Type=vm:LaunchViewModel}">
+
+    <UserControl.Background>
+        <SolidColorBrush Color="#0E0E10" />
+    </UserControl.Background>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Padding="32,32,32,16">
+
+        <StackPanel>
+
+            <!-- Header -->
+            <TextBlock Text="{DynamicResource LaunchTitle}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="32"
+                       FontWeight="Black"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
+
+            <TextBlock Text="{DynamicResource LaunchSubtitle}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="14"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       Margin="0,4,0,32" />
+
+            <!-- Big Play card -->
+            <Border Style="{StaticResource CardPanel}"
+                    Margin="0,0,0,24"
+                    Height="220">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Status block -->
+                    <StackPanel Grid.Column="0"
+                                VerticalAlignment="Center">
+                        <!-- Status indicator -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,12">
+                            <Ellipse Width="10" Height="10"
+                                     Margin="0,0,8,0"
+                                     Fill="{StaticResource SuccessBrush}" />
+                            <TextBlock Text="{DynamicResource StatusRunning}"
+                                       FontFamily="{StaticResource PrimaryFont}"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource SuccessBrush}" />
+                        </StackPanel>
+
+                        <TextBlock Text="Counter-Strike 2"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="36"
+                                   FontWeight="Black"
+                                   Foreground="{StaticResource TextPrimaryBrush}" />
+
+                        <TextBlock Text="Valve Corporation • Free to play"
+                                   FontFamily="{StaticResource PrimaryFont}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextDimBrush}"
+                                   Margin="0,8,0,0" />
+
+                        <TextBlock Text="{Binding LaunchResult}"
+                                   FontFamily="{StaticResource MonoFont}"
+                                   FontSize="11"
+                                   Foreground="{StaticResource AccentBrush}"
+                                   Margin="0,12,0,0"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <!-- Big PLAY button -->
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                MinWidth="200">
+                        <Button Style="{StaticResource PrimaryButton}"
+                                Command="{Binding LaunchCommand}"
+                                FontSize="20"
+                                FontWeight="Black"
+                                Padding="40,28"
+                                Margin="0,0,0,12">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="▶" FontSize="20" Margin="0,0,12,0" />
+                                <TextBlock Text="{DynamicResource PlayButton}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Command="{Binding CloseGameCommand}"
+                                HorizontalAlignment="Stretch">
+                            <TextBlock Text="{DynamicResource CloseGameButton}" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Launch options section -->
+            <TextBlock Text="{DynamicResource LaunchArgsTitle}"
+                       FontFamily="{StaticResource PrimaryFont}"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimaryBrush}"
+                       Margin="0,0,0,12" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Left column: checkboxes -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardPanel}"
+                        Margin="0,0,12,0">
+                    <StackPanel>
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionNoVid}"
+                                  IsChecked="{Binding Options.NoVid}"
+                                  Margin="0,0,0,14" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionNoJoy}"
+                                  IsChecked="{Binding Options.NoJoy}"
+                                  Margin="0,0,0,14" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionHigh}"
+                                  IsChecked="{Binding Options.High}"
+                                  Margin="0,0,0,14" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionFullscreen}"
+                                  IsChecked="{Binding Options.Fullscreen}"
+                                  Margin="0,0,0,14" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionConsole}"
+                                  IsChecked="{Binding Options.Console}"
+                                  Margin="0,0,0,14" />
+
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionNoBrowser}"
+                                  IsChecked="{Binding Options.NoBrowser}"
+                                  Margin="0,0,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Right column: advanced -->
+                <Border Grid.Column="1"
+                        Style="{StaticResource CardPanel}"
+                        Margin="12,0,0,0">
+                    <StackPanel>
+                        <!-- Threads -->
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionThreads}"
+                                  IsChecked="{Binding Options.UseThreads}"
+                                  Margin="0,0,0,8" />
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="24,0,0,16">
+                            <TextBlock Text="-threads"
+                                       FontFamily="{StaticResource MonoFont}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextDimBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <ComboBox Style="{StaticResource FaceitComboBox}"
+                                       Width="80"
+                                       IsEnabled="{Binding Options.UseThreads}"
+                                       SelectedValue="{Binding Options.ThreadsValue}"
+                                       SelectedValuePath="Content">
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="4" />
+                                <ComboBoxItem Content="6" />
+                                <ComboBoxItem Content="8" />
+                                <ComboBoxItem Content="12" />
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Tickrate -->
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource OptionTickrate}"
+                                  IsChecked="{Binding Options.UseTickrate}"
+                                  Margin="0,0,0,8" />
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="24,0,0,16">
+                            <TextBlock Text="-tickrate"
+                                       FontFamily="{StaticResource MonoFont}"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextDimBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <ComboBox Style="{StaticResource FaceitComboBox}"
+                                       Width="80"
+                                       IsEnabled="{Binding Options.UseTickrate}"
+                                       SelectedValue="{Binding Options.TickrateValue}"
+                                       SelectedValuePath="Content">
+                                <ComboBoxItem Content="64" />
+                                <ComboBoxItem Content="128" />
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Custom args -->
+                        <TextBlock Text="{DynamicResource CustomArgs}"
+                                   Style="{StaticResource LabelStyle}"
+                                   Margin="0,0,0,4" />
+                        <TextBox Style="{StaticResource FaceitTextBox}"
+                                 Text="{Binding Options.CustomArgs, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="{DynamicResource CustomArgsPlaceholder}" />
+
+                        <TextBlock Text=" "
+                                   Height="8" />
+
+                        <!-- Use Steam protocol -->
+                        <CheckBox Style="{StaticResource FaceitCheckbox}"
+                                  Content="{DynamicResource UseSteamProtocol}"
+                                  IsChecked="{Binding Options.UseSteamProtocol}"
+                                  Margin="0,0,0,14" />
+
+                        <!-- Manual path -->
+                        <TextBlock Text="{DynamicResource ExecutablePath}"
+                                   Style="{StaticResource LabelStyle}"
+                                   Margin="0,0,0,4" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Style="{StaticResource FaceitTextBox}"
+                                     Text="{Binding Options.ExecutablePath, UpdateSourceTrigger=PropertyChanged}"
+                                     IsEnabled="{Binding Options.UseSteamProtocol,
+                                                          Converter={x:Static vm:InverseBoolConverter.Instance}}" />
+                            <Button Grid.Column="1"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Command="{Binding BrowseExecutableCommand}"
+                                    Margin="8,0,0,0"
+                                    IsEnabled="{Binding Options.UseSteamProtocol,
+                                                        Converter={x:Static vm:InverseBoolConverter.Instance}}">
+                                <TextBlock Text="{DynamicResource BrowseButton}" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

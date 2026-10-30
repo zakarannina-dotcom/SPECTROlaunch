@@ -1,0 +1,33 @@
+## .NET / Visual Studio
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.vs/
+*.cache
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## Build artifacts
+*.dll
+*.pdb
+*.exe.config
+*.exe.manifest
+Publish/
+publish/
+
+## OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+## Logs
+*.log
+logs/
+
+## Steam API key (НИКОГДА не коммить)
+steam_api_key.txt
+appsettings.local.json
